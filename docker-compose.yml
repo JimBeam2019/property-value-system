@@ -1,0 +1,75 @@
+services:
+  housing-price-prediction:
+    build:
+      context: .
+      dockerfile: apps/housing-price-prediction/Dockerfile
+    container_name: housing-price-prediction
+    restart: unless-stopped
+    networks:
+      - property-value-network
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  property-value-estimator:
+    build:
+      context: .
+      dockerfile: apps/property-value-estimator/Dockerfile
+    container_name: property-value-estimator
+    restart: unless-stopped
+    environment:
+      - ML_SERVICE_URL=http://housing-price-prediction:8000
+    networks:
+      - property-value-network
+    ports:
+      - "8010:8010"
+    depends_on:
+      housing-price-prediction:
+        condition: service_healthy
+
+  property-market-analysis:
+    build:
+      context: .
+      dockerfile: apps/property-market-analysis/market/Dockerfile
+    container_name: property-market-analysis
+    restart: unless-stopped
+    environment:
+      - ML_SERVICE_URL=http://housing-price-prediction:8000
+    networks:
+      - property-value-network
+    ports:
+      - "8020:8020"
+    depends_on:
+      housing-price-prediction:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: .
+      dockerfile: apps/front-end/Dockerfile
+    container_name: frontend
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - API_URL=http://localhost:3000/api
+      - ESTIMATOR_SERVICE_URL=http://property-value-estimator:8010
+      - MARKET_ANALYSES_SERVICE_URL=http://property-market-analysis:8020/api/market
+    networks:
+      - property-value-network
+    ports:
+      - "3000:3000"
+    depends_on:
+      - property-value-estimator
+      - property-market-analysis
+
+networks:
+  property-value-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.21.0.0/24
