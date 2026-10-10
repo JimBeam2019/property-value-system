@@ -1,0 +1,27 @@
+[project]
+name = "property-value-system"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Jim", email = "bingking68@hotmail.com" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "jinja2>=3.1.6",
+    "pandas>=3.0.5",
+    "scikit-learn>=1.9.0",
+]
+
+[project.scripts]
+property-value-system = "property_value_system:main"
+
+[build-system]
+requires = ["uv_build>=0.12.1,<0.13.0"]
+build-backend = "uv_build"
+
+[tool.uv.workspace]
+members = [
+    "apps/housing-price-prediction",
+    "apps/property-value-estimator",
+]
