@@ -26,7 +26,7 @@ flowchart LR
 ├── apps/
 │   ├── housing-price-prediction/   # FastAPI + scikit-learn model API
 │   ├── property-value-estimator/   # App 1 backend (Python)
-│   ├── property-market-analysis/   # App 2 backend (Java 21, Spring Boot)   TODO: confirm folder name
+│   ├── property-market-analysis/   # App 2 backend (Java 21, Spring Boot)
 │   └── front-end/                     # Next.js frontend
 ├── data/                           # Training and testing data sets for ML
 ├── models/                         # Trained model artifact(s) loaded by the ML API
