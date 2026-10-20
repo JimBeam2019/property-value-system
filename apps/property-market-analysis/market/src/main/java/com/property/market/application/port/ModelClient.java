@@ -11,10 +11,8 @@ import com.property.market.application.dto.PredictionRequest;
  */
 public interface ModelClient {
     CompletableFuture<Double> predict(
-        PredictionRequest request
-    );
+            PredictionRequest request);
 
     CompletableFuture<List<Double>> predictBatch(
-        List<PredictionRequest> requests
-    );
+            List<PredictionRequest> requests);
 }

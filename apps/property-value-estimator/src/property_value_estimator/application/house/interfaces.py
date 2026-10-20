@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from .dto import EstimatePropertyCommand
+from .dto import PropertyEstimateRequest
 
 
 class ModelPredictionError(Exception):
@@ -12,5 +12,5 @@ class ModelClient(ABC):
     ## Model Client Interface
     """
     @abstractmethod
-    async def predict(self, property: EstimatePropertyCommand) -> float:
+    async def predict(self, property: PropertyEstimateRequest) -> float:
         raise NotImplementedError

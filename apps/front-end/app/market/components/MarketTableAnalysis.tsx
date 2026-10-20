@@ -24,17 +24,29 @@ const MarketTableAnalysis = () => {
     if (!marketProperties || marketProperties.properties.length === 0) return []
 
     return marketProperties.properties.map(
-      ({ property, predictedPrice }, index) =>
+      (
+        {
+          squareFootage,
+          bedrooms,
+          bathrooms,
+          yearBuilt,
+          lotSize,
+          schoolRating,
+          distanceToCityCenter,
+          price,
+        },
+        index
+      ) =>
         ({
+          squareFootage,
+          bedrooms,
+          bathrooms,
+          yearBuilt,
+          lotSize,
+          schoolRating,
+          distanceToCityCenter,
+          price,
           id: index + 1,
-          squareFootage: property.squareFootage,
-          bedrooms: property.bedrooms,
-          bathrooms: property.bathrooms,
-          yearBuilt: property.yearBuilt,
-          lotSize: property.lotSize,
-          schoolRating: property.schoolRating,
-          distanceToCityCenter: property.distanceToCityCenter,
-          price: predictedPrice,
         }) as MarketPropertyType
     )
   }, [marketProperties])

@@ -43,9 +43,9 @@ const SquareFootageScatterChart = ({
   const data = useMemo(() => {
     if (!marketProperties || marketProperties.properties.length === 0) return []
 
-    return marketProperties.properties.map(({ property, predictedPrice }) => ({
-      square_footage: property.squareFootage,
-      price: predictedPrice ? Math.floor(predictedPrice * 0.001) : 0,
+    return marketProperties.properties.map(({ squareFootage, price }) => ({
+      square_footage: squareFootage,
+      price: price ? Math.floor(price * 0.001) : 0,
     }))
   }, [marketProperties])
 

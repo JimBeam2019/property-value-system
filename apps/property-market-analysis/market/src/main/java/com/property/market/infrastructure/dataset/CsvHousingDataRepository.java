@@ -5,14 +5,18 @@ import java.io.InputStream;
 import java.io.PushbackInputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
+import com.property.market.application.dto.PredictionRequest;
 import com.property.market.application.port.HousingDataRepository;
+import com.property.market.application.port.ModelClient;
 import com.property.market.domain.Property;
 
 /**
@@ -25,13 +29,31 @@ public class CsvHousingDataRepository implements HousingDataRepository {
     private final List<Property> properties;
 
     public CsvHousingDataRepository(
-        @Value("${housing.dataset-path:classpath:/data/Test Data For Prediction.csv}") String datasetPath
-    ) {
-        this.properties = load(datasetPath);
+            @Qualifier("httpModelClient") ModelClient modelClient,
+            @Value("${housing.dataset-path:classpath:/data/Test Data For Prediction.csv}") String datasetPath) {
+
+        List<Property> srcProperties = load(datasetPath);
+
+        List<Double> prices = modelClient.predictBatch(
+                srcProperties.stream().map(PredictionRequest::from).toList()).join();
+
+        if (prices.size() != srcProperties.size()) {
+            throw new IllegalStateException(
+                    "ML service returned "
+                            + prices.size()
+                            + " predictions for "
+                            + srcProperties.size()
+                            + " properties");
+        }
+
+        this.properties = IntStream.range(0, srcProperties.size())
+                .mapToObj(i -> srcProperties.get(i).withPrice(prices.get(i))).toList();
     }
 
-    /**    (non-Javadoc)
+    /**
+     * (non-Javadoc)
      * Returns all properties
+     * 
      * @see com.property.market.application.port.HousingDataRepository#findAll()
      */
     @Override
@@ -41,6 +63,7 @@ public class CsvHousingDataRepository implements HousingDataRepository {
 
     /**
      * Load property data set from CSV
+     * 
      * @param datasetPath
      * @return
      */
@@ -67,6 +90,7 @@ public class CsvHousingDataRepository implements HousingDataRepository {
 
     /**
      * Open CSV file from path
+     * 
      * @param datasetPath
      * @return
      */
@@ -85,8 +109,7 @@ public class CsvHousingDataRepository implements HousingDataRepository {
                 return input;
             } else {
                 input = java.nio.file.Files.newInputStream(
-                    java.nio.file.Path.of(datasetPath)
-                );
+                        java.nio.file.Path.of(datasetPath));
             }
 
             return removeUtf8Bom(input);
@@ -97,6 +120,7 @@ public class CsvHousingDataRepository implements HousingDataRepository {
 
     /**
      * Remove UTF-8 BOM from CSV
+     * 
      * @param input
      * @return
      * @throws IOException
@@ -107,11 +131,9 @@ public class CsvHousingDataRepository implements HousingDataRepository {
         byte[] bom = new byte[3];
         int read = pushback.read(bom);
 
-        if (
-            read == 3 && (bom[0] & 0xFF) == 0xFF
-            && (bom[1] & 0xFF) == 0xBB
-            && (bom[2] & 0xFF) == 0xBF
-        ) {
+        if (read == 3 && (bom[0] & 0xFF) == 0xFF
+                && (bom[1] & 0xFF) == 0xBB
+                && (bom[2] & 0xFF) == 0xBF) {
             return pushback;
         }
 
@@ -125,6 +147,7 @@ public class CsvHousingDataRepository implements HousingDataRepository {
     /**
      * 
      * CSV Row
+     * 
      * @param square_footage
      * @param bedrooms
      * @param bathrooms
@@ -134,24 +157,22 @@ public class CsvHousingDataRepository implements HousingDataRepository {
      * @param school_rating
      */
     private record Row(
-        double square_footage,
-        int bedrooms,
-        double bathrooms,
-        int year_built,
-        double lot_size,
-        double distance_to_city_center,
-        double school_rating
-    ) {
+            double square_footage,
+            int bedrooms,
+            double bathrooms,
+            int year_built,
+            double lot_size,
+            double distance_to_city_center,
+            double school_rating) {
         Property toProperty() {
             return new Property(
-                square_footage,
-                bedrooms,
-                bathrooms,
-                year_built,
-                lot_size,
-                distance_to_city_center,
-                school_rating
-            );
+                    square_footage,
+                    bedrooms,
+                    bathrooms,
+                    year_built,
+                    lot_size,
+                    distance_to_city_center,
+                    school_rating);
         }
     }
 }

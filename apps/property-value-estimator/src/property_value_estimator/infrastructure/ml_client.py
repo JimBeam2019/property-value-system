@@ -1,6 +1,6 @@
 import aiohttp
 
-from ..application.house.dto import EstimatePropertyCommand
+from ..application.house.dto import PropertyEstimateRequest
 from ..application.house.interfaces import ModelClient, ModelPredictionError
 
 
@@ -12,7 +12,7 @@ class AioHttpModelClient(ModelClient):
         self._base_url = base_url.rstrip("/")
         self._session = session
 
-    async def predict(self, property: EstimatePropertyCommand) -> float:
+    async def predict(self, property: PropertyEstimateRequest) -> float:
         """
         ### Calls the House Price Prediction API to make a simgle Property Value Estimation.
         """

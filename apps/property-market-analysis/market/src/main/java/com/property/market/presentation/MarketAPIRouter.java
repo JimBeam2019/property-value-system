@@ -27,180 +27,193 @@ import org.springframework.web.bind.annotation.RequestBody;
  * 
  * Market API Router
  */
-@RestController 
+@RestController
 @RequestMapping("/api/market")
 public class MarketAPIRouter {
-    private final MarketAnalysisService marketAnalysisService;
-    private final PredictionService predictionService;
+        private final MarketAnalysisService marketAnalysisService;
+        private final PredictionService predictionService;
 
-    public MarketAPIRouter(
-        MarketAnalysisService marketAnalysisService,
-        PredictionService predictionService
-    ) {
-        this.marketAnalysisService = marketAnalysisService;
-        this.predictionService = predictionService;
-    }
+        public MarketAPIRouter(
+                        MarketAnalysisService marketAnalysisService,
+                        PredictionService predictionService) {
 
-    /**
-     * Get Market Filter Ranges (Minimum and Maxmum)
-     * @return
-     */
-    @GetMapping("/filter-ranges")
-    public CompletableFuture<ResponseEntity<MarketFilterRange>> filterRanges() {
-        return marketAnalysisService.filterRanges()
-                .thenApply(ResponseEntity::ok);
-    }
-    
-
-    /**
-     * Get Market Statistics
-     * @param minBedrooms
-     * @param maxBedrooms
-     * @param minYearBuilt
-     * @param maxYearBuilt
-     * @param minSquareFootage
-     * @param maxSquareFootage
-     * @param minSchoolRating
-     * @param maxSchoolRating
-     * @return
-     */
-    @GetMapping("/statistics")
-    public CompletableFuture<ResponseEntity<MarketStatistics>> statistics(
-        @RequestParam(name = "minBedrooms", required = false) Integer minBedrooms,
-        @RequestParam(name = "maxBedrooms", required = false) Integer maxBedrooms,
-        @RequestParam(name = "minYearBuilt", required = false) Integer minYearBuilt,
-        @RequestParam(name = "maxYearBuilt", required = false) Integer maxYearBuilt,
-        @RequestParam(name = "minSquareFootage", required = false) Double minSquareFootage,
-        @RequestParam(name = "maxSquareFootage", required = false) Double maxSquareFootage,
-        @RequestParam(name = "minSchoolRating", required = false) Double minSchoolRating,
-        @RequestParam(name = "maxSchoolRating", required = false) Double maxSchoolRating
-    ) {
-        MarketFilter filter = new MarketFilter(
-            minBedrooms,
-            maxBedrooms,
-            minYearBuilt,
-            maxYearBuilt,
-            minSquareFootage,   
-            maxSquareFootage,
-            minSchoolRating,
-            maxSchoolRating
-        );
-
-        return marketAnalysisService.statistics(filter)
-                .thenApply(ResponseEntity::ok);
-    }
-
-    /**
-     * Get Price by Year Built
-     * @param minBedrooms
-     * @param maxBedrooms
-     * @param minYearBuilt
-     * @param maxYearBuilt
-     * @param minSquareFootage
-     * @param maxSquareFootage
-     * @param minSchoolRating
-     * @param maxSchoolRating
-     * @return
-     */
-    @GetMapping("/price-by-year-built")
-    public CompletableFuture<ResponseEntity<List<YearlyPriceAnalysis>>> priceByYearBuilt(
-        @RequestParam(name = "minBedrooms", required = false) Integer minBedrooms,
-        @RequestParam(name = "maxBedrooms", required = false) Integer maxBedrooms,
-        @RequestParam(name = "minYearBuilt", required = false) Integer minYearBuilt,
-        @RequestParam(name = "maxYearBuilt", required = false) Integer maxYearBuilt,
-        @RequestParam(name = "minSquareFootage", required = false) Double minSquareFootage,
-        @RequestParam(name = "maxSquareFootage", required = false) Double maxSquareFootage,
-        @RequestParam(name = "minSchoolRating", required = false) Double minSchoolRating,
-        @RequestParam(name = "maxSchoolRating", required = false) Double maxSchoolRating
-    ) {
-        MarketFilter filter = new MarketFilter(
-            minBedrooms,
-            maxBedrooms,
-            minYearBuilt,
-            maxYearBuilt,
-            minSquareFootage,
-            maxSquareFootage,
-            minSchoolRating,
-            maxSchoolRating
-        );
-
-        return marketAnalysisService.priceByYearBuilt(filter)
-                .thenApply(ResponseEntity::ok);
-    }
-    
-    /**
-     * Get Properties
-     * @param page
-     * @param size
-     * @param sort
-     * @param descending
-     * @param minBedrooms
-     * @param maxBedrooms
-     * @param minYearBuilt
-     * @param maxYearBuilt
-     * @param minSquareFootage
-     * @param maxSquareFootage
-     * @param minSchoolRating
-     * @param maxSchoolRating
-     * @return
-     */
-    @GetMapping("/properties")
-    public CompletableFuture<ResponseEntity<MarketPropertyList>> properties(
-        @RequestParam(name = "page", defaultValue = "0") int page,
-        @RequestParam(name = "size", defaultValue = "20") int size,
-        @RequestParam(name = "sort", defaultValue = "squareFootage") String sort,
-        @RequestParam(name = "descending", defaultValue = "false") boolean descending,
-        @RequestParam(name = "minBedrooms", required = false) Integer minBedrooms,
-        @RequestParam(name = "maxBedrooms", required = false) Integer maxBedrooms,
-        @RequestParam(name = "minYearBuilt", required = false) Integer minYearBuilt,
-        @RequestParam(name = "maxYearBuilt", required = false) Integer maxYearBuilt,
-        @RequestParam(name = "minSquareFootage", required = false) Double minSquareFootage,
-        @RequestParam(name = "maxSquareFootage", required = false) Double maxSquareFootage,
-        @RequestParam(name = "minSchoolRating", required = false) Double minSchoolRating,
-        @RequestParam(name = "maxSchoolRating", required = false) Double maxSchoolRating
-    ) {
-        if (page < 0 || size < 1 || size > 100) {
-            throw new IllegalArgumentException("page must be >= 0 and size must be between 1 and 100");
+                this.marketAnalysisService = marketAnalysisService;
+                this.predictionService = predictionService;
         }
 
-        MarketFilter filter = new MarketFilter(
-            minBedrooms,
-                maxBedrooms,
-                minYearBuilt,
-                maxYearBuilt,
-                minSquareFootage,
-                maxSquareFootage,
-                minSchoolRating,
-                maxSchoolRating
-        );
-        return marketAnalysisService.properties(filter, page, size, sort, descending)
-                .thenApply(ResponseEntity::ok);
-    }
-    
-    /**
-     * Post Property Value Estimation for What-If Analysis
-     * @param request
-     * @return
-     */
-    @PostMapping("/what-if")
-    public CompletableFuture<ResponseEntity<WhatIfResponse>> whatIf(
-        @Valid @RequestBody WhatIfRequest request
-    ) {
-        return predictionService.predict(request.toPredictionRequest())
-                .thenApply(prediction -> ResponseEntity.ok(
-                    new WhatIfResponse(request, prediction)
-                ));
-    }
-    
-    /**
-     * 
-     * What-If Response
-     * @param property
-     * @param predictedPrice
-     */
-    private record WhatIfResponse(
-        WhatIfRequest property,
-        double predictedPrice
-    ) {
-    }
+        /**
+         * Get Market Filter Ranges (Minimum and Maxmum)
+         * 
+         * @return
+         */
+        @GetMapping("/filter-ranges")
+        public CompletableFuture<ResponseEntity<MarketFilterRange>> filterRanges() {
+
+                return CompletableFuture.supplyAsync(() -> marketAnalysisService.filterRanges())
+                                .thenApply(ResponseEntity::ok);
+        }
+
+        /**
+         * Get Market Statistics
+         * 
+         * @param minBedrooms
+         * @param maxBedrooms
+         * @param minYearBuilt
+         * @param maxYearBuilt
+         * @param minSquareFootage
+         * @param maxSquareFootage
+         * @param minSchoolRating
+         * @param maxSchoolRating
+         * @return
+         */
+        @GetMapping("/statistics")
+        public CompletableFuture<ResponseEntity<MarketStatistics>> statistics(
+                        @RequestParam(name = "minPrice", required = false) Double minPrice,
+                        @RequestParam(name = "maxPrice", required = false) Double maxPrice,
+                        @RequestParam(name = "minBedrooms", required = false) Integer minBedrooms,
+                        @RequestParam(name = "maxBedrooms", required = false) Integer maxBedrooms,
+                        @RequestParam(name = "minYearBuilt", required = false) Integer minYearBuilt,
+                        @RequestParam(name = "maxYearBuilt", required = false) Integer maxYearBuilt,
+                        @RequestParam(name = "minSquareFootage", required = false) Double minSquareFootage,
+                        @RequestParam(name = "maxSquareFootage", required = false) Double maxSquareFootage,
+                        @RequestParam(name = "minSchoolRating", required = false) Double minSchoolRating,
+                        @RequestParam(name = "maxSchoolRating", required = false) Double maxSchoolRating) {
+
+                MarketFilter filter = new MarketFilter(
+                                minPrice,
+                                maxPrice,
+                                minBedrooms,
+                                maxBedrooms,
+                                minYearBuilt,
+                                maxYearBuilt,
+                                minSquareFootage,
+                                maxSquareFootage,
+                                minSchoolRating,
+                                maxSchoolRating);
+
+                return CompletableFuture.supplyAsync(() -> marketAnalysisService.statistics(filter))
+                                .thenApply(ResponseEntity::ok);
+        }
+
+        /**
+         * Get Price by Year Built
+         * 
+         * @param minBedrooms
+         * @param maxBedrooms
+         * @param minYearBuilt
+         * @param maxYearBuilt
+         * @param minSquareFootage
+         * @param maxSquareFootage
+         * @param minSchoolRating
+         * @param maxSchoolRating
+         * @return
+         */
+        @GetMapping("/price-by-year-built")
+        public CompletableFuture<ResponseEntity<List<YearlyPriceAnalysis>>> priceByYearBuilt(
+                        @RequestParam(name = "minPrice", required = false) Double minPrice,
+                        @RequestParam(name = "maxPrice", required = false) Double maxPrice,
+                        @RequestParam(name = "minBedrooms", required = false) Integer minBedrooms,
+                        @RequestParam(name = "maxBedrooms", required = false) Integer maxBedrooms,
+                        @RequestParam(name = "minYearBuilt", required = false) Integer minYearBuilt,
+                        @RequestParam(name = "maxYearBuilt", required = false) Integer maxYearBuilt,
+                        @RequestParam(name = "minSquareFootage", required = false) Double minSquareFootage,
+                        @RequestParam(name = "maxSquareFootage", required = false) Double maxSquareFootage,
+                        @RequestParam(name = "minSchoolRating", required = false) Double minSchoolRating,
+                        @RequestParam(name = "maxSchoolRating", required = false) Double maxSchoolRating) {
+                MarketFilter filter = new MarketFilter(
+                                minPrice,
+                                maxPrice,
+                                minBedrooms,
+                                maxBedrooms,
+                                minYearBuilt,
+                                maxYearBuilt,
+                                minSquareFootage,
+                                maxSquareFootage,
+                                minSchoolRating,
+                                maxSchoolRating);
+
+                return CompletableFuture.supplyAsync(() -> marketAnalysisService.priceByYearBuilt(filter))
+                                .thenApply(ResponseEntity::ok);
+        }
+
+        /**
+         * Get Properties
+         * 
+         * @param page
+         * @param size
+         * @param sort
+         * @param descending
+         * @param minBedrooms
+         * @param maxBedrooms
+         * @param minYearBuilt
+         * @param maxYearBuilt
+         * @param minSquareFootage
+         * @param maxSquareFootage
+         * @param minSchoolRating
+         * @param maxSchoolRating
+         * @return
+         */
+        @GetMapping("/properties")
+        public CompletableFuture<ResponseEntity<MarketPropertyList>> properties(
+                        @RequestParam(name = "page", defaultValue = "0") int page,
+                        @RequestParam(name = "size", defaultValue = "20") int size,
+                        @RequestParam(name = "sort", defaultValue = "squareFootage") String sort,
+                        @RequestParam(name = "descending", defaultValue = "false") boolean descending,
+                        @RequestParam(name = "minPrice", required = false) Double minPrice,
+                        @RequestParam(name = "maxPrice", required = false) Double maxPrice,
+                        @RequestParam(name = "minBedrooms", required = false) Integer minBedrooms,
+                        @RequestParam(name = "maxBedrooms", required = false) Integer maxBedrooms,
+                        @RequestParam(name = "minYearBuilt", required = false) Integer minYearBuilt,
+                        @RequestParam(name = "maxYearBuilt", required = false) Integer maxYearBuilt,
+                        @RequestParam(name = "minSquareFootage", required = false) Double minSquareFootage,
+                        @RequestParam(name = "maxSquareFootage", required = false) Double maxSquareFootage,
+                        @RequestParam(name = "minSchoolRating", required = false) Double minSchoolRating,
+                        @RequestParam(name = "maxSchoolRating", required = false) Double maxSchoolRating) {
+                if (page < 0 || size < 1 || size > 100) {
+                        throw new IllegalArgumentException("page must be >= 0 and size must be between 1 and 100");
+                }
+
+                MarketFilter filter = new MarketFilter(
+                                minPrice,
+                                maxPrice,
+                                minBedrooms,
+                                maxBedrooms,
+                                minYearBuilt,
+                                maxYearBuilt,
+                                minSquareFootage,
+                                maxSquareFootage,
+                                minSchoolRating,
+                                maxSchoolRating);
+
+                return CompletableFuture
+                                .supplyAsync(() -> marketAnalysisService.properties(filter, page, size, sort,
+                                                descending))
+                                .thenApply(ResponseEntity::ok);
+        }
+
+        /**
+         * Post Property Value Estimation for What-If Analysis
+         * 
+         * @param request
+         * @return
+         */
+        @PostMapping("/what-if")
+        public CompletableFuture<ResponseEntity<WhatIfResponse>> whatIf(
+                        @Valid @RequestBody WhatIfRequest request) {
+                return predictionService.predict(request.toPredictionRequest())
+                                .thenApply(prediction -> ResponseEntity.ok(
+                                                new WhatIfResponse(request, prediction)));
+        }
+
+        /**
+         * 
+         * What-If Response
+         * 
+         * @param property
+         * @param predictedPrice
+         */
+        private record WhatIfResponse(
+                        WhatIfRequest property,
+                        double predictedPrice) {
+        }
 }

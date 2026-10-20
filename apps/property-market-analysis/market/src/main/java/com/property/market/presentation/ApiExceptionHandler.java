@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  * 
  * API Exception Handler
  */
-@RestControllerAdvice 
+@RestControllerAdvice
 public class ApiExceptionHandler {
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<Map<String, String>> handleBadRequest(IllegalArgumentException es) {
@@ -19,7 +19,7 @@ public class ApiExceptionHandler {
                 .body(Map.of("error", es.getMessage()));
     }
 
-    @ExceptionHandler (Exception.class)
+    @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, String>> handleUnexpected(Exception ex) {
         return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
                 .body(Map.of("error", "Unable to complete the market analysis request"));
