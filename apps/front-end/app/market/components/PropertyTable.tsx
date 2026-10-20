@@ -150,7 +150,9 @@ const PropertyTable = ({ data, onSelect }: Props) => {
       <div className="flex justify-between pr-4">
         <dt>
           <input
-            className="mb-4 w-full rounded border border-gray-200 p-2"
+            className="mb-4 w-full rounded border border-gray-200 
+            focus:outline-none focus:ring-2 focus:ring-offset-0 
+            focus:border-blue-600 focus:ring-blue-200 p-2"
             placeholder="Search properties..."
             value={globalFilter}
             onChange={(e) => setGlobalFilter(e.target.value)}

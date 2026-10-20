@@ -13,23 +13,20 @@ import com.github.benmanes.caffeine.cache.Caffeine;
  * 
  * Cache Config
  */
-@Configuration 
+@Configuration
 public class CacheConfig {
 
-    @Bean 
+    @Bean
     public CacheManager cacheManager() {
         CaffeineCacheManager manager = new CaffeineCacheManager(
-            "predictions",
+                "predictions",
                 "marketStatistics",
                 "priceByYearBuilt",
-                "marketProperties"
-        );
+                "marketProperties");
 
         manager.setCaffeine(
-            Caffeine.newBuilder().maximumSize(1_000).expireAfterWrite(
-                Duration.ofMinutes(10)
-            )
-        );
+                Caffeine.newBuilder().maximumSize(1_000).expireAfterWrite(
+                        Duration.ofMinutes(10)));
 
         return manager;
     }

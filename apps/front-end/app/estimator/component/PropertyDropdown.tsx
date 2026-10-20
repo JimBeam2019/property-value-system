@@ -145,12 +145,14 @@ const PropertyDropdown = ({ properties, onSelect }: PropertyDropdownProps) => {
                 `}
               >
                 {/* Layer 1 — title / subtitle */}
-                <p className="text-sm font-semibold text-gray-900">
-                  {currencyFormatter.format(property.estimatedValue)}
-                </p>
-                <p className="text-xs text-gray-500">
-                  Built {property.yearBuilt}
-                </p>
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                  <span className="text-sm font-semibold text-gray-900">
+                    {currencyFormatter.format(property.estimatedValue)}
+                  </span>
+                  <span className="text-xs text-gray-500">
+                    Built in {property.yearBuilt}
+                  </span>
+                </div>
 
                 {/* Layer 2 — stats row */}
                 <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-600">
@@ -158,9 +160,13 @@ const PropertyDropdown = ({ properties, onSelect }: PropertyDropdownProps) => {
                     {numberFormatter.format(property.squareFootage)} sq ft
                   </span>
                   <span className="text-gray-300">•</span>
-                  <span>{property.bedrooms} bd</span>
+                  <span>
+                    {property.bedrooms} bedroom{property.bedrooms > 1 && 's'}
+                  </span>
                   <span className="text-gray-300">•</span>
-                  <span>{property.bathrooms} ba</span>
+                  <span>
+                    {property.bathrooms} bathroom{property.bathrooms > 1 && 's'}
+                  </span>
                 </div>
               </button>
             </li>

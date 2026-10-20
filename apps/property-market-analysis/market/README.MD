@@ -63,129 +63,89 @@ curl "http://localhost:8020/api/market/properties?page=0&size=10&minBedrooms=3&s
 {
   "properties": [
     {
-      "property": {
-        "squareFootage": 1020.0,
-        "bedrooms": 2,
-        "bathrooms": 1.0,
-        "yearBuilt": 1979,
-        "lotSize": 4400.0,
-        "distanceToCityCenter": 2.0,
-        "schoolRating": 6.5
-      },
-      "predictedPrice": 150102.68355216488
+      "squareFootage": 1350.0,
+      "bedrooms": 3,
+      "bathrooms": 1.0,
+      "yearBuilt": 1988,
+      "lotSize": 5700.0,
+      "distanceToCityCenter": 3.1,
+      "schoolRating": 7.0,
+      "price": 193562.3429821461
     },
     {
-      "property": {
-        "squareFootage": 1180.0,
-        "bedrooms": 2,
-        "bathrooms": 1.0,
-        "yearBuilt": 1982,
-        "lotSize": 5100.0,
-        "distanceToCityCenter": 2.5,
-        "schoolRating": 6.7
-      },
-      "predictedPrice": 171432.39150678256
+      "squareFootage": 1430.0,
+      "bedrooms": 3,
+      "bathrooms": 1.5,
+      "yearBuilt": 1990,
+      "lotSize": 6200.0,
+      "distanceToCityCenter": 3.3,
+      "schoolRating": 7.2,
+      "price": 214791.27877401077
     },
     {
-      "property": {
-        "squareFootage": 1350.0,
-        "bedrooms": 3,
-        "bathrooms": 1.0,
-        "yearBuilt": 1988,
-        "lotSize": 5700.0,
-        "distanceToCityCenter": 3.1,
-        "schoolRating": 7.0
-      },
-      "predictedPrice": 193562.3429821461
+      "squareFootage": 1550.0,
+      "bedrooms": 3,
+      "bathrooms": 2.0,
+      "yearBuilt": 1997,
+      "lotSize": 6800.0,
+      "distanceToCityCenter": 4.1,
+      "schoolRating": 7.6,
+      "price": 252588.64351884168
     },
     {
-      "property": {
-        "squareFootage": 1430.0,
-        "bedrooms": 3,
-        "bathrooms": 1.5,
-        "yearBuilt": 1990,
-        "lotSize": 6200.0,
-        "distanceToCityCenter": 3.3,
-        "schoolRating": 7.2
-      },
-      "predictedPrice": 214791.27877401077
+      "squareFootage": 1650.0,
+      "bedrooms": 3,
+      "bathrooms": 2.0,
+      "yearBuilt": 1999,
+      "lotSize": 7100.0,
+      "distanceToCityCenter": 4.2,
+      "schoolRating": 7.8,
+      "price": 260098.04999941564
     },
     {
-      "property": {
-        "squareFootage": 1550.0,
-        "bedrooms": 3,
-        "bathrooms": 2.0,
-        "yearBuilt": 1997,
-        "lotSize": 6800.0,
-        "distanceToCityCenter": 4.1,
-        "schoolRating": 7.6
-      },
-      "predictedPrice": 252588.64351884168
+      "squareFootage": 1870.0,
+      "bedrooms": 3,
+      "bathrooms": 2.5,
+      "yearBuilt": 2001,
+      "lotSize": 7900.0,
+      "distanceToCityCenter": 5.5,
+      "schoolRating": 8.3,
+      "price": 303356.4418298054
     },
     {
-      "property": {
-        "squareFootage": 1650.0,
-        "bedrooms": 3,
-        "bathrooms": 2.0,
-        "yearBuilt": 1999,
-        "lotSize": 7100.0,
-        "distanceToCityCenter": 4.2,
-        "schoolRating": 7.8
-      },
-      "predictedPrice": 260098.04999941564
+      "squareFootage": 2100.0,
+      "bedrooms": 4,
+      "bathrooms": 2.5,
+      "yearBuilt": 2005,
+      "lotSize": 9200.0,
+      "distanceToCityCenter": 6.8,
+      "schoolRating": 8.6,
+      "price": 351327.0518526593
     },
     {
-      "property": {
-        "squareFootage": 1870.0,
-        "bedrooms": 3,
-        "bathrooms": 2.5,
-        "yearBuilt": 2001,
-        "lotSize": 7900.0,
-        "distanceToCityCenter": 5.5,
-        "schoolRating": 8.3
-      },
-      "predictedPrice": 303356.4418298054
+      "squareFootage": 2200.0,
+      "bedrooms": 4,
+      "bathrooms": 2.5,
+      "yearBuilt": 2008,
+      "lotSize": 9600.0,
+      "distanceToCityCenter": 7.0,
+      "schoolRating": 8.8,
+      "price": 363905.1186221375
     },
     {
-      "property": {
-        "squareFootage": 2100.0,
-        "bedrooms": 4,
-        "bathrooms": 2.5,
-        "yearBuilt": 2005,
-        "lotSize": 9200.0,
-        "distanceToCityCenter": 6.8,
-        "schoolRating": 8.6
-      },
-      "predictedPrice": 351327.0518526593
-    },
-    {
-      "property": {
-        "squareFootage": 2200.0,
-        "bedrooms": 4,
-        "bathrooms": 2.5,
-        "yearBuilt": 2008,
-        "lotSize": 9600.0,
-        "distanceToCityCenter": 7.0,
-        "schoolRating": 8.8
-      },
-      "predictedPrice": 363905.1186221375
-    },
-    {
-      "property": {
-        "squareFootage": 2300.0,
-        "bedrooms": 4,
-        "bathrooms": 3.0,
-        "yearBuilt": 2013,
-        "lotSize": 10300.0,
-        "distanceToCityCenter": 8.0,
-        "schoolRating": 9.2
-      },
-      "predictedPrice": 408467.4308452967
+      "squareFootage": 2300.0,
+      "bedrooms": 4,
+      "bathrooms": 3.0,
+      "yearBuilt": 2013,
+      "lotSize": 10300.0,
+      "distanceToCityCenter": 8.0,
+      "schoolRating": 9.2,
+      "price": 408467.4308452967
     }
   ],
   "page": 0,
-  "size": 20,
-  "totalElements": 10,
+  "size": 10,
+  "totalElements": 8,
   "totalPages": 1
 }
 ```

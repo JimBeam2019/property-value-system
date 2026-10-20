@@ -3,6 +3,7 @@ package com.property.market.application.service;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -13,16 +14,17 @@ import com.property.market.application.port.ModelClient;
  * 
  * Prediction Service Use Case
  */
-@Service 
+@Service
 public class PredictionService {
     private final ModelClient modelClient;
 
-    public PredictionService(ModelClient modelClient) {
+    public PredictionService(@Qualifier("httpModelClient") ModelClient modelClient) {
         this.modelClient = modelClient;
     }
 
     /**
-     * Proceeds a single-property value prediction 
+     * Proceeds a single-property value prediction
+     * 
      * @param request
      * @return
      */
@@ -32,13 +34,13 @@ public class PredictionService {
     }
 
     /**
-     * Proceeds a multiple-properties value prediction 
+     * Proceeds a multiple-properties value prediction
+     * 
      * @param requests
      * @return
      */
     public CompletableFuture<List<Double>> predictBatch(
-        List<PredictionRequest> requests
-    ) {
+            List<PredictionRequest> requests) {
         if (requests.isEmpty()) {
             return CompletableFuture.completedFuture(List.of());
         }

@@ -22,7 +22,7 @@ export type MarketStatisticsResponse = {
 }
 
 export type MarketPropertyType = {
-  id: number
+  id?: number
   squareFootage: number
   bedrooms: number
   bathrooms: number
@@ -38,7 +38,7 @@ export type MarketPropertiesResponse = {
   size: number
   totalElements: number
   totalPages: number
-  properties: MarketPropertyResponse[]
+  properties: MarketPropertyType[]
 }
 
 export type MarketPropertyResponse = {

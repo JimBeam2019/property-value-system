@@ -15,58 +15,62 @@ import com.property.market.application.port.ModelClient;
  * 
  * ## Http Model Client for Property Value Prodition
  */
-@Component 
-public class HttpModelClient implements ModelClient{
+@Component
+public class HttpModelClient implements ModelClient {
 
     private final WebClient webClient;
 
     public HttpModelClient(
-        WebClient.Builder builder,
-        @Value("${ml-service.url:http://localhost:8000}") String mlServiceUrl
-    ) {
+            WebClient.Builder builder,
+            @Value("${ml-service.url:http://localhost:8000}") String mlServiceUrl) {
         this.webClient = builder.baseUrl(mlServiceUrl).build();
     }
 
-    /**    (non-Javadoc)
+    /**
+     * (non-Javadoc)
      * Proceeds a single-property value prediction
+     * 
      * @see com.property.market.application.port.ModelClient#predict(com.property.market.application.dto.PredictionRequest)
      */
-    @Override 
+    @Override
     public CompletableFuture<Double> predict(
-        PredictionRequest request
-    ) {
+            PredictionRequest request) {
+
         return webClient.post()
-            .uri("/model/predict")
-            .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(request)
-            .retrieve()
-            .bodyToMono(PredictionResponse.class)
-            .map(response -> response.price())
-            .toFuture();
+                .uri("/model/predict")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(request)
+                .retrieve()
+                .bodyToMono(PredictionResponse.class)
+                .map(response -> response.price())
+                .toFuture();
     }
 
-    /**    (non-Javadoc)
+    /**
+     * (non-Javadoc)
      * Proceeds a batch-properties value prediction
+     * 
      * @see com.property.market.application.port.ModelClient#predictBatch(java.util.List)
      */
-    @Override 
+    @Override
     public CompletableFuture<List<Double>> predictBatch(
-        List<PredictionRequest> requests
-    ) {
+            List<PredictionRequest> requests) {
+
         return webClient.post()
-            .uri("/model/predict")
-            .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(requests)
-            .retrieve()
-            .bodyToFlux(PredictionResponse.class)
-            .map(response -> response.price())
-            .collectList()
-            .toFuture();
+                .uri("/model/predict")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(requests)
+                .retrieve()
+                .bodyToFlux(PredictionResponse.class)
+                .map(response -> response.price())
+                .collectList()
+                .toFuture();
     }
 
     /**
      * 
      * Prediction Response
+     * 
      * @param square_footage
      * @param bedrooms
      * @param bathrooms
@@ -77,14 +81,13 @@ public class HttpModelClient implements ModelClient{
      * @param price
      */
     private record PredictionResponse(
-        double square_footage,
-        int bedrooms,
-        double bathrooms,
-        int year_built,
-        double lot_size,
-        double distance_to_city_center,
-        double school_rating,
-        double price
-    ) {
+            double square_footage,
+            int bedrooms,
+            double bathrooms,
+            int year_built,
+            double lot_size,
+            double distance_to_city_center,
+            double school_rating,
+            double price) {
     }
 }
