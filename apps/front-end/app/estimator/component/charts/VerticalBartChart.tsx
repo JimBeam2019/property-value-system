@@ -10,6 +10,7 @@ import {
   Tooltip,
   Legend,
 } from 'recharts'
+
 import { RechartsDevtools } from '@recharts/devtools'
 import { PropertyType } from '@/types/property'
 

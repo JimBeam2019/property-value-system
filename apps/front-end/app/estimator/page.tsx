@@ -3,14 +3,14 @@ import { Suspense } from 'react'
 import dynamic from 'next/dynamic'
 import { Metadata } from 'next'
 
-import PropertyForm from './component/PropertyForm'
+import PropertyForm from './component/property-form'
 import Tabs from './component/Tabs'
 import EstimateProvider from './context/EstimateProvider'
 import PropertyDetails from './component/PropertyDetails'
 
 const PredictionHistory = dynamic(() => import('./component/PredictionHistory'))
 const PropertyComparison = dynamic(
-  () => import('./component/PropertyComparison')
+  () => import('./component/property-comparison')
 )
 
 export const metadata: Metadata = {

@@ -1,7 +1,7 @@
 'use client'
 
 import { currencyFormatter, numberFormatter } from '@/libs/utils'
-import { useEstimate } from '../context/EstimateProvider'
+import { useEstimate } from '@/app/estimator/context/EstimateProvider'
 
 /**
  * Property Details

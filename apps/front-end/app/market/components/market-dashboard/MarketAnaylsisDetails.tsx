@@ -1,7 +1,7 @@
 'use client'
 
 import { currencyFormatter } from '@/libs/utils'
-import { useMarket } from '../context/MarketProvider'
+import { useMarket } from '@/app/market/context/MarketProvider'
 
 /**
  * Market Analysis Details

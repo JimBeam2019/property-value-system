@@ -53,3 +53,22 @@ export type MarketPropertyResponse = {
   }
   predictedPrice: number
 }
+
+export type PriceByYearBuilt = {
+  yearBuilt: number
+  propertyCount: number
+  averagePredictedPrice: number
+}
+
+export type PriceByBedrooms = {
+  bedrooms: number
+  propertyCount: number
+  averagePredictedPrice: number
+}
+
+export type PriceBySize = {
+  squareFootage: number
+  lotSize: number
+  propertyCount: number
+  
+}

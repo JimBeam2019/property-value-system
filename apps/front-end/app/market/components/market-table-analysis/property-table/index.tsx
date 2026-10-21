@@ -2,9 +2,10 @@
 
 import { useMemo, useState } from 'react'
 import { ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react'
+
 import { MarketPropertyType } from '@/types/market'
 import { currencyFormatter } from '@/libs/utils'
-import { useMarket } from '../context/MarketProvider'
+import { useMarket } from '@/app/market/context/MarketProvider'
 import ExportButtons from './ExportButtons'
 
 interface Props {

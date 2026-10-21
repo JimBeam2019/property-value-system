@@ -2,6 +2,8 @@ package com.property.market.application.service;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -9,9 +11,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import com.property.market.application.dto.BedroomsPriceAnalysis;
 import com.property.market.application.dto.MarketFilter;
 import com.property.market.application.dto.MarketFilterRange;
 import com.property.market.application.dto.MarketPropertyList;
+import com.property.market.application.dto.PriceBySizeAnalysis;
 import com.property.market.application.dto.YearlyPriceAnalysis;
 import com.property.market.application.port.HousingDataRepository;
 import com.property.market.domain.MarketStatistics;
@@ -124,7 +128,7 @@ public class MarketAnalysisService {
 
                 return properties.stream()
                                 .collect(Collectors.groupingBy(
-                                                a -> a.yearBuilt(),
+                                                a -> (a.yearBuilt() / 10) * 10,
                                                 Collectors.toList()))
                                 .entrySet()
                                 .stream()
@@ -138,6 +142,62 @@ public class MarketAnalysisService {
                                                                 .orElse(0.0)))
                                 .toList();
 
+        }
+
+        /**
+         * 
+         * @param filter
+         * @return
+         */
+        @Cacheable(value = "priceByBedrooms", key = "#filter")
+        public List<BedroomsPriceAnalysis> priceByBedrooms(MarketFilter filter) {
+                List<Property> properties = filtered(filter);
+
+                return properties.stream()
+                                .collect(Collectors.groupingBy(a -> a.bedrooms(), TreeMap::new, Collectors.toList()))
+                                .entrySet()
+                                .stream()
+                                .map(entry -> new BedroomsPriceAnalysis(
+                                                entry.getKey(),
+                                                entry.getValue().size(),
+                                                entry.getValue().stream()
+                                                                .mapToDouble(Property::price)
+                                                                .average()
+                                                                .orElse(0.0)))
+                                .toList();
+        }
+
+        /**
+         * 
+         * @param filter
+         * @return
+         */
+        @Cacheable(value = "priceBySize", key = "#filter")
+        public List<PriceBySizeAnalysis> priceBySize(MarketFilter filter) {
+
+                List<Property> properties = filtered(filter);
+
+                return properties.stream()
+                                .filter(p -> p.squareFootage() > 0 && p.lotSize() > 0)
+                                .collect(Collectors.groupingBy(
+                                                p -> new SizeGroup(
+                                                                ((int) p.squareFootage() / 500) * 500,
+                                                                ((int) p.lotSize() / 1000) * 1000)))
+                                .entrySet()
+                                .stream()
+                                .sorted(Comparator
+                                                .comparingInt((Map.Entry<SizeGroup, List<Property>> e) -> e.getKey()
+                                                                .squareFootageRange())
+                                                .thenComparingInt(e -> e.getKey().lotSizeRange()))
+                                .map(entry -> new PriceBySizeAnalysis(
+                                                entry.getKey().squareFootageRange() + 250.0,
+                                                entry.getKey().lotSizeRange() + 500.0,
+                                                entry.getValue().stream()
+                                                                .mapToDouble(Property::price)
+                                                                .average()
+                                                                .orElse(0.0),
+                                                entry.getValue().size()))
+                                .toList();
         }
 
         /**
@@ -286,5 +346,8 @@ public class MarketAnalysisService {
                 }
 
                 return (values.get(size / 2 - 1) + values.get(size / 2)) / 2.0;
+        }
+
+        private record SizeGroup(int squareFootageRange, int lotSizeRange) {
         }
 }

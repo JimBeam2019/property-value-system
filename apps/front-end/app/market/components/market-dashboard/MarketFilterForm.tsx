@@ -1,9 +1,10 @@
 'use client'
 
+import { SubmitEvent, useCallback, useState } from 'react'
+
 import RangeSlider from '@/app/components/RangeSlider'
 import { MarketFilterRanges } from '@/types/market'
-import { SubmitEvent, useCallback, useState } from 'react'
-import { useMarket } from '../context/MarketProvider'
+import { useMarket } from '@/app/market/context/MarketProvider'
 import useEffectOnce from '@/libs/useEffectOnce'
 
 /**

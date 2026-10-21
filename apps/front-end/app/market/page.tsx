@@ -1,7 +1,8 @@
 import { Suspense } from 'react'
+
 import MarketProvider from './context/MarketProvider'
-import MarketDashboard from './components/MarketDashboard'
-import MarketTableAnalysis from './components/MarketTableAnalysis'
+import MarketDashboard from './components/market-dashboard'
+import MarketTableAnalysis from './components/market-table-analysis'
 
 export const metadata = {
   title: 'Property Market Analysis',

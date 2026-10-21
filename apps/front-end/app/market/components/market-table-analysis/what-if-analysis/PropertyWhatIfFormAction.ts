@@ -1,9 +1,10 @@
 'use server'
 
+import { z } from 'zod'
+
 import { postMarketWhatIf } from '@/libs/marketWhatIf'
 import { currentYear } from '@/libs/utils'
 import { MarketPropertyResponse } from '@/types/market'
-import { z } from 'zod'
 
 const propertyFormSchema = z
   .object({

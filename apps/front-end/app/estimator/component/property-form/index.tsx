@@ -2,51 +2,48 @@
 
 import { useActionState } from 'react'
 
+import { PropertyFormState, submitPropertyForm } from './PropertyFormActions'
 import {
-  PropertyWhatIfFormState,
-  submitPropertyWhatIfForm,
-} from './PropertyWhatIfFormAction'
-import {
+  PropertyStoreState,
+  usePropertyValueStore,
+} from '@/store/property-value-store'
+import { useEstimate } from '@/app/estimator/context/EstimateProvider'
+import TextField from '@/app/components/TextField'
+import SelectField, {
   bathroomOptions,
   bedroomOptions,
   yearBuiltOptions,
 } from '@/app/components/SelectField'
-import TextFieldVertical from '@/app/components/TextFieldVertical'
-import SelectFieldVertical from '@/app/components/SelectFieldVertical'
-import { MarketPropertyType } from '@/types/market'
-import { useMarket } from '../context/MarketProvider'
 
 /**
- * Property What-If Form
+ * Property Form
  *
- * @param {{ property: MarketPropertyType }} { property }
  * @return {*}
  */
-const PropertyWhatIfForm = ({ property }: { property: MarketPropertyType }) => {
-  const initState: PropertyWhatIfFormState = {
+const PropertyForm = () => {
+  const initState: PropertyFormState = {
     message: null,
     success: false,
     errors: {},
   }
+  const { properties } = usePropertyValueStore() as PropertyStoreState
+  const addProperty = usePropertyValueStore((state) => state.addProperty)
 
-  const { changeNewProperty } = useMarket()
+  const { setCurPropertyEstimate } = useEstimate()
 
   const [state, formData, isPending] = useActionState(
-    async (prev: PropertyWhatIfFormState, formData: FormData) => {
-      const result = await submitPropertyWhatIfForm(prev, formData)
+    async (prev: PropertyFormState, formData: FormData) => {
+      const result = await submitPropertyForm(prev, formData)
 
-      if (result.success && result.property) {
-        changeNewProperty({
-          id: property.id,
-          squareFootage: result.property.property.squareFootage,
-          bedrooms: result.property.property.bedrooms,
-          bathrooms: result.property.property.bathrooms,
-          yearBuilt: result.property.property.yearBuilt,
-          lotSize: result.property.property.lotSize,
-          schoolRating: result.property.property.schoolRating,
-          distanceToCityCenter: result.property.property.distanceToCityCenter,
-          price: result.property.predictedPrice,
-        })
+      if (
+        result.success &&
+        result.property &&
+        !properties.some(
+          ({ timestampe }) => timestampe === result.property?.timestampe
+        )
+      ) {
+        addProperty({ ...result.property, id: properties.length + 1 })
+        setCurPropertyEstimate(result.property)
       }
 
       return result
@@ -56,75 +53,72 @@ const PropertyWhatIfForm = ({ property }: { property: MarketPropertyType }) => {
 
   return (
     <div className="m-6">
-      <form key={property.id} action={formData} noValidate>
+      <form
+        action={formData}
+        noValidate
+        className="mx-auto w-full max-w-8xl rounded-lg border border-gray-200 bg-white p-6 shadow-sm sm:p-8"
+      >
         <h2 className="mb-6 text-lg font-semibold text-gray-900">
-          What-If Analysis
+          Property Details
         </h2>
 
-        <div className="py-6 space-y-4">
-          <TextFieldVertical
+        <div className="grid grid-cols-1 gap-x-4 gap-y-5 sm:grid-cols-2 lg:grid-cols-4">
+          <TextField
             label="Square Footage"
             type="number"
             name="square_footage"
             id="square_footage"
-            defaultValue={property.squareFootage}
             min={1}
             step={1}
-            error={state.errors?.squareFootage}
+            error={state.errors?.square_footage}
           />
-          <SelectFieldVertical
+          <SelectField
             label="Bedrooms"
             name="bedrooms"
             id="bedrooms"
-            defaultValue={property.bedrooms}
             options={bedroomOptions}
             error={state.errors?.bedrooms}
           />
-          <SelectFieldVertical
+          <SelectField
             label="Bathrooms"
             name="bathrooms"
             id="bathrooms"
-            defaultValue={property.bathrooms}
             options={bathroomOptions}
             error={state.errors?.bathrooms}
           />
-          <SelectFieldVertical
+          <SelectField
             label="Year Built"
             name="year_built"
             id="year_built"
-            defaultValue={property.yearBuilt}
             options={yearBuiltOptions}
-            error={state.errors?.yearBuilt}
+            error={state.errors?.year_built}
           />
-          <TextFieldVertical
+          <TextField
             label="Lot Size"
             type="number"
             name="lot_size"
             id="lot_size"
-            defaultValue={property.lotSize}
             min={1}
             step={1}
-            error={state.errors?.lotSize}
+            error={state.errors?.lot_size}
           />
-          <TextFieldVertical
+          <TextField
             label="Distance to City Center"
             type="number"
             name="distance_to_city_center"
             id="distance_to_city_center"
-            defaultValue={property.distanceToCityCenter}
             min={0.1}
             step={0.1}
-            error={state.errors?.distanceToCityCenter}
+            error={state.errors?.distance_to_city_center}
           />
-          <TextFieldVertical
+          <TextField
             label="School Rating"
             type="number"
             name="school_rating"
             id="school_rating"
-            defaultValue={property.schoolRating}
             min={0.1}
             step={0.1}
-            error={state.errors?.schoolRating}
+            error={state.errors?.school_rating}
           />
         </div>
 
@@ -138,7 +132,7 @@ const PropertyWhatIfForm = ({ property }: { property: MarketPropertyType }) => {
           disabled:cursor-not-allowed disabled:bg-blue-300
           sm:w-auto"
         >
-          {isPending ? 'Submitting' : 'Apply'}
+          {isPending ? 'Submitting...' : 'Submit'}
         </button>
 
         {state.message && (
@@ -155,4 +149,4 @@ const PropertyWhatIfForm = ({ property }: { property: MarketPropertyType }) => {
   )
 }
 
-export default PropertyWhatIfForm
+export default PropertyForm

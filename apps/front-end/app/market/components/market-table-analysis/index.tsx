@@ -3,9 +3,9 @@
 import { useMemo } from 'react'
 
 import { MarketPropertyType } from '@/types/market'
-import PropertyTable from './PropertyTable'
-import { useMarket } from '../context/MarketProvider'
-import MarketWhatIfAnalysis from './MarketWhatIfAnalysis'
+import { useMarket } from '@/app/market/context/MarketProvider'
+import PropertyTable from './property-table'
+import MarketWhatIfAnalysis from './what-if-analysis'
 
 /**
  * Market Table Analysis
