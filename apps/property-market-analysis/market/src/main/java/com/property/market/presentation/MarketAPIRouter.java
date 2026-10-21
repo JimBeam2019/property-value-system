@@ -3,9 +3,11 @@ package com.property.market.presentation;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.property.market.application.dto.BedroomsPriceAnalysis;
 import com.property.market.application.dto.MarketFilter;
 import com.property.market.application.dto.MarketFilterRange;
 import com.property.market.application.dto.MarketPropertyList;
+import com.property.market.application.dto.PriceBySizeAnalysis;
 import com.property.market.application.dto.WhatIfRequest;
 import com.property.market.application.dto.YearlyPriceAnalysis;
 import com.property.market.application.service.MarketAnalysisService;
@@ -133,6 +135,92 @@ public class MarketAPIRouter {
                                 maxSchoolRating);
 
                 return CompletableFuture.supplyAsync(() -> marketAnalysisService.priceByYearBuilt(filter))
+                                .thenApply(ResponseEntity::ok);
+        }
+
+        /**
+         * Get Price by Bedrooms
+         * 
+         * @param minPrice
+         * @param maxPrice
+         * @param minBedrooms
+         * @param maxBedrooms
+         * @param minYearBuilt
+         * @param maxYearBuilt
+         * @param minSquareFootage
+         * @param maxSquareFootage
+         * @param minSchoolRating
+         * @param maxSchoolRating
+         * @return
+         */
+        @GetMapping("/price-by-bedrooms")
+        public CompletableFuture<ResponseEntity<List<BedroomsPriceAnalysis>>> priceByBedrooms(
+                        @RequestParam(name = "minPrice", required = false) Double minPrice,
+                        @RequestParam(name = "maxPrice", required = false) Double maxPrice,
+                        @RequestParam(name = "minBedrooms", required = false) Integer minBedrooms,
+                        @RequestParam(name = "maxBedrooms", required = false) Integer maxBedrooms,
+                        @RequestParam(name = "minYearBuilt", required = false) Integer minYearBuilt,
+                        @RequestParam(name = "maxYearBuilt", required = false) Integer maxYearBuilt,
+                        @RequestParam(name = "minSquareFootage", required = false) Double minSquareFootage,
+                        @RequestParam(name = "maxSquareFootage", required = false) Double maxSquareFootage,
+                        @RequestParam(name = "minSchoolRating", required = false) Double minSchoolRating,
+                        @RequestParam(name = "maxSchoolRating", required = false) Double maxSchoolRating) {
+                MarketFilter filter = new MarketFilter(
+                                minPrice,
+                                maxPrice,
+                                minBedrooms,
+                                maxBedrooms,
+                                minYearBuilt,
+                                maxYearBuilt,
+                                minSquareFootage,
+                                maxSquareFootage,
+                                minSchoolRating,
+                                maxSchoolRating);
+
+                return CompletableFuture.supplyAsync(() -> marketAnalysisService.priceByBedrooms(filter))
+                                .thenApply(ResponseEntity::ok);
+        }
+
+        /**
+         * Get Price by Size
+         * 
+         * @param minPrice
+         * @param maxPrice
+         * @param minBedrooms
+         * @param maxBedrooms
+         * @param minYearBuilt
+         * @param maxYearBuilt
+         * @param minSquareFootage
+         * @param maxSquareFootage
+         * @param minSchoolRating
+         * @param maxSchoolRating
+         * @return
+         */
+        @GetMapping("/price-by-size")
+        public CompletableFuture<ResponseEntity<List<PriceBySizeAnalysis>>> priceBySize(
+                        @RequestParam(name = "minPrice", required = false) Double minPrice,
+                        @RequestParam(name = "maxPrice", required = false) Double maxPrice,
+                        @RequestParam(name = "minBedrooms", required = false) Integer minBedrooms,
+                        @RequestParam(name = "maxBedrooms", required = false) Integer maxBedrooms,
+                        @RequestParam(name = "minYearBuilt", required = false) Integer minYearBuilt,
+                        @RequestParam(name = "maxYearBuilt", required = false) Integer maxYearBuilt,
+                        @RequestParam(name = "minSquareFootage", required = false) Double minSquareFootage,
+                        @RequestParam(name = "maxSquareFootage", required = false) Double maxSquareFootage,
+                        @RequestParam(name = "minSchoolRating", required = false) Double minSchoolRating,
+                        @RequestParam(name = "maxSchoolRating", required = false) Double maxSchoolRating) {
+                MarketFilter filter = new MarketFilter(
+                                minPrice,
+                                maxPrice,
+                                minBedrooms,
+                                maxBedrooms,
+                                minYearBuilt,
+                                maxYearBuilt,
+                                minSquareFootage,
+                                maxSquareFootage,
+                                minSchoolRating,
+                                maxSchoolRating);
+
+                return CompletableFuture.supplyAsync(() -> marketAnalysisService.priceBySize(filter))
                                 .thenApply(ResponseEntity::ok);
         }
 

@@ -16,6 +16,9 @@ import {
   MarketPropertiesResponse,
   MarketPropertyType,
   MarketStatisticsResponse,
+  PriceByBedrooms,
+  PriceBySize,
+  PriceByYearBuilt,
 } from '@/types/market'
 import { fetcher, fetcherWithParams } from '@/libs/fetcher'
 
@@ -25,6 +28,9 @@ export interface MarketContextType {
   newProperty: MarketPropertyType | null
   marketProperties: MarketPropertiesResponse | undefined
   marketStatistics: MarketStatisticsResponse | undefined
+  marketPricesByYearBuilt: PriceByYearBuilt[] | undefined
+  marketPricesBySize: PriceBySize[] | undefined
+  marketPricesByBedrooms: PriceByBedrooms[] | undefined
   addMarketFilterRanges: (marketFilterRanges: MarketFilterRanges) => void
   changeCurrentProperty: (property: MarketPropertyType | null) => void
   changeNewProperty: (property: MarketPropertyType | null) => void
@@ -58,7 +64,7 @@ const MarketProvider = ({ children }: { children: ReactNode }) => {
     null
   )
 
-  const { data: statData, isLoading: isLoadingStats } = useSWR(
+  const { data: statsData, isLoading: isLoadingStats } = useSWR(
     marketFilterRanges
       ? [
           '/api/market/statistic',
@@ -80,6 +86,74 @@ const MarketProvider = ({ children }: { children: ReactNode }) => {
     { dedupingInterval: 2_000, keepPreviousData: true }
   )
 
+  const { data: priceByYearBuiltData, isLoading: isLoadingPriceByYearBuilt } =
+    useSWR(
+      marketFilterRanges
+        ? [
+            '/api/market/price-by-year-built',
+            {
+              minPrice: marketFilterRanges.minPrice,
+              maxPrice: marketFilterRanges.maxPrice,
+              minBedrooms: marketFilterRanges.minBedrooms,
+              maxBedrooms: marketFilterRanges.maxBedrooms,
+              minYearBuilt: marketFilterRanges.minYearBuilt,
+              maxYearBuilt: marketFilterRanges.maxYearBuilt,
+              minSquareFootage: marketFilterRanges.minSquareFootage,
+              maxSquareFootage: marketFilterRanges.maxSquareFootage,
+              minSchoolRating: marketFilterRanges.minSchoolRating,
+              maxSchoolRating: marketFilterRanges.maxSchoolRating,
+            },
+          ]
+        : null,
+      fetcherWithParams,
+      { dedupingInterval: 2_000, keepPreviousData: true }
+    )
+
+  const { data: priceBySizeData, isLoading: isLoadingPriceBySize } = useSWR(
+    marketFilterRanges
+      ? [
+          '/api/market/price-by-size',
+          {
+            minPrice: marketFilterRanges.minPrice,
+            maxPrice: marketFilterRanges.maxPrice,
+            minBedrooms: marketFilterRanges.minBedrooms,
+            maxBedrooms: marketFilterRanges.maxBedrooms,
+            minYearBuilt: marketFilterRanges.minYearBuilt,
+            maxYearBuilt: marketFilterRanges.maxYearBuilt,
+            minSquareFootage: marketFilterRanges.minSquareFootage,
+            maxSquareFootage: marketFilterRanges.maxSquareFootage,
+            minSchoolRating: marketFilterRanges.minSchoolRating,
+            maxSchoolRating: marketFilterRanges.maxSchoolRating,
+          },
+        ]
+      : null,
+    fetcherWithParams,
+    { dedupingInterval: 2_000, keepPreviousData: true }
+  )
+
+  const { data: priceByBedroomsData, isLoading: isLoadingPriceByBedrooms } =
+    useSWR(
+      marketFilterRanges
+        ? [
+            '/api/market/price-by-bedrooms',
+            {
+              minPrice: marketFilterRanges.minPrice,
+              maxPrice: marketFilterRanges.maxPrice,
+              minBedrooms: marketFilterRanges.minBedrooms,
+              maxBedrooms: marketFilterRanges.maxBedrooms,
+              minYearBuilt: marketFilterRanges.minYearBuilt,
+              maxYearBuilt: marketFilterRanges.maxYearBuilt,
+              minSquareFootage: marketFilterRanges.minSquareFootage,
+              maxSquareFootage: marketFilterRanges.maxSquareFootage,
+              minSchoolRating: marketFilterRanges.minSchoolRating,
+              maxSchoolRating: marketFilterRanges.maxSchoolRating,
+            },
+          ]
+        : null,
+      fetcherWithParams,
+      { dedupingInterval: 2_000, keepPreviousData: true }
+    )
+
   const { data: propertyData, isLoading: isLoadingProperties } = useSWR(
     '/api/market/properties',
     fetcher,
@@ -91,10 +165,34 @@ const MarketProvider = ({ children }: { children: ReactNode }) => {
 
   const marketStatistics = useMemo(
     () =>
-      !isLoadingStats && statData
-        ? (statData as MarketStatisticsResponse)
+      !isLoadingStats && statsData
+        ? (statsData as MarketStatisticsResponse)
         : undefined,
-    [statData, isLoadingStats]
+    [statsData, isLoadingStats]
+  )
+
+  const marketPricesByYearBuilt = useMemo(
+    () =>
+      !isLoadingPriceByYearBuilt && priceByYearBuiltData
+        ? (priceByYearBuiltData as PriceByYearBuilt[])
+        : undefined,
+    [isLoadingPriceByYearBuilt, priceByYearBuiltData]
+  )
+
+  const marketPricesBySize = useMemo(
+    () =>
+      !isLoadingPriceBySize && priceBySizeData
+        ? (priceBySizeData as PriceBySize[])
+        : undefined,
+    [isLoadingPriceBySize, priceBySizeData]
+  )
+
+  const marketPricesByBedrooms = useMemo(
+    () =>
+      !isLoadingPriceByBedrooms && priceByBedroomsData
+        ? (priceByBedroomsData as PriceByBedrooms[])
+        : undefined,
+    [isLoadingPriceByBedrooms, priceByBedroomsData]
   )
 
   const marketProperties = useMemo(
@@ -128,6 +226,9 @@ const MarketProvider = ({ children }: { children: ReactNode }) => {
       newProperty,
       marketProperties,
       marketStatistics,
+      marketPricesByYearBuilt,
+      marketPricesBySize,
+      marketPricesByBedrooms,
       addMarketFilterRanges,
       changeCurrentProperty,
       changeNewProperty,
@@ -138,6 +239,9 @@ const MarketProvider = ({ children }: { children: ReactNode }) => {
       changeNewProperty,
       currentProperty,
       marketFilterRanges,
+      marketPricesByBedrooms,
+      marketPricesBySize,
+      marketPricesByYearBuilt,
       marketProperties,
       marketStatistics,
       newProperty,

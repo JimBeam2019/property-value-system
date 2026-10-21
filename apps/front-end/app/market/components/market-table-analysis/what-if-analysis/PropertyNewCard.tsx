@@ -2,7 +2,7 @@
 
 import { currencyFormatter, numberFormatter } from '@/libs/utils'
 import { MarketPropertyType } from '@/types/market'
-import { useMarket } from '../context/MarketProvider'
+import { useMarket } from '@/app/market/context/MarketProvider'
 
 /**
  * Property New Card

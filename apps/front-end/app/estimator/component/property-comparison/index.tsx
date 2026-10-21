@@ -1,14 +1,13 @@
 'use client'
 
+import { useMemo, useState } from 'react'
+
 import {
   PropertyStoreState,
   usePropertyValueStore,
 } from '@/store/property-value-store'
 import PropertyDropdown from './PropertyDropdown'
 import PropertyCard from './PropertyCard'
-// import DoubleBarScatterChart from './charts/DoubleBarScatterChart'
-// import StackedBarScatterChart from './charts/StackedBarScatterChart'
-import { useMemo, useState } from 'react'
 import { PropertyType } from '@/types/property'
 
 /**
@@ -80,16 +79,6 @@ const PropertyComparison = () => {
           </div>
         ))}
       </div>
-
-      {/* <div className="w-full rounded-lg bg-white shadow-md">
-        <div className="p-6 m-6">
-          <div className="grid grid-cols-1 gap-x-4 gap-y-5 sm:grid-cols-1 lg:grid-cols-2">
-            <DoubleBarScatterChart />
-
-            <StackedBarScatterChart />
-          </div>
-        </div>
-      </div> */}
     </div>
   )
 }

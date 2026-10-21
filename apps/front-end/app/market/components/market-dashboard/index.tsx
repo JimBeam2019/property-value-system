@@ -1,8 +1,9 @@
 import { getMarketFilterRanges } from '@/libs/market'
 import MarketFilterForm from './MarketFilterForm'
 import MarketAnalysisDetails from './MarketAnaylsisDetails'
-// import SquareFootageScatterChart from './charts/SquareFootageScatterChart'
-// import SimpleBarChart from './charts/LineChart'
+import PricesByYearBuiltBarChart from '@/app/market/components/charts/PricesByYearBuiltBarChart'
+// import PriceByBedroomsChart from '../charts/PriceByBedroomsChart'
+import PriceScatterChart from '../charts/PriceBySizeScatterChart'
 
 /**
  * Market Dashboard
@@ -23,9 +24,16 @@ const MarketDashboard = async () => {
           <div className="col-span-12 sm:col-span-12 lg:col-span-9 p-6">
             <MarketAnalysisDetails />
 
-            {/* <SquareFootageScatterChart />
+            <div className="grid grid-cols-12 gap-2">
+              <div className="col-span-12 sm:col-span-12 lg:col-span-6 p-6">
+                <PricesByYearBuiltBarChart />
+              </div>
+              <div className="col-span-12 sm:col-span-12 lg:col-span-6 p-6">
+                <PriceScatterChart />
+              </div>
+            </div>
 
-            <SimpleBarChart /> */}
+            {/* <PriceByBedroomsChart /> */}
           </div>
         </div>
       </div>

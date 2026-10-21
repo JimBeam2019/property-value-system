@@ -174,3 +174,78 @@ curl -X POST http://localhost:8020/api/market/what-if -H "Content-Type: applicat
   "predictedPrice": 252588.64351884168
 }
 ```
+
+```bash
+curl "http://localhost:8020/api/market/price-by-year-built?minYearBuilt=2000&maxYearBuilt=2020"
+```
+
+```json
+[
+  {
+    "yearBuilt": 2001,
+    "propertyCount": 1,
+    "averagePredictedPrice": 303356.4418298054
+  },
+  {
+    "yearBuilt": 2005,
+    "propertyCount": 1,
+    "averagePredictedPrice": 351327.0518526593
+  },
+  {
+    "yearBuilt": 2008,
+    "propertyCount": 1,
+    "averagePredictedPrice": 363905.1186221375
+  },
+  {
+    "yearBuilt": 2013,
+    "propertyCount": 1,
+    "averagePredictedPrice": 408467.4308452967
+  }
+]
+```
+
+```bash
+curl "http://localhost:8020/api/market/price-by-bedrooms?minYearBuilt=2000&maxYearBuilt=2020"
+```
+
+```json
+[
+  {
+    "bedrooms": 3,
+    "propertyCount": 1,
+    "averagePredictedPrice": 303356.4418298054
+  },
+  {
+    "bedrooms": 4,
+    "propertyCount": 3,
+    "averagePredictedPrice": 374566.5337733645
+  }
+]
+```
+
+```bash
+curl "http://localhost:8020/api/market/price-by-size?minYearBuilt=2000&maxYearBuilt=2020"
+```
+
+```json
+[
+  {
+    "squareFootage": 1750.0,
+    "lotSize": 7500.0,
+    "predictedPrice": 303356.4418298054,
+    "propertyCount": 1
+  },
+  {
+    "squareFootage": 2250.0,
+    "lotSize": 9500.0,
+    "predictedPrice": 357616.0852373984,
+    "propertyCount": 2
+  },
+  {
+    "squareFootage": 2250.0,
+    "lotSize": 10500.0,
+    "predictedPrice": 408467.4308452967,
+    "propertyCount": 1
+  }
+]
+```

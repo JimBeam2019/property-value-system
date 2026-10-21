@@ -19,14 +19,6 @@ type PropertyEstimate = {
   estimated_value: number
 }
 
-// const currencyFormatter = new Intl.NumberFormat('en-US', {
-//   style: 'currency',
-//   currency: 'USD',
-//   maximumFractionDigits: 2,
-// })
-
-// const numberFormatter = new Intl.NumberFormat('en-US')
-
 const columns: {
   key: keyof PropertyEstimate
   label: string

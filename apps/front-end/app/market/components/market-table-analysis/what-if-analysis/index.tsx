@@ -1,6 +1,6 @@
 'use client'
 
-import { useMarket } from '../context/MarketProvider'
+import { useMarket } from '@/app/market/context/MarketProvider'
 import PropertyCard from './PropertyCard'
 import PropertyNewCard from './PropertyNewCard'
 import PropertyWhatIfForm from './PropertyWhatIfForm'
